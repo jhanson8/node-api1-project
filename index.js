@@ -31,17 +31,23 @@ server.get("/api/users", (req, res) => {
 //GET a specific user
 
 server.get("/api/users/:id", (req, res) => {
-  Hubs.find()
-    .then(hubs => {
-      res.status(200).json(hubs);
+  const { id } = req.params;
+  Hubs.findById(id)
+    .then(item => {
+      if (!id) {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      } else {
+        res.status(200).json(item);
+      }
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({
-        errorMessage: "The users information could not be retrieved."
-      });
+      res
+        .status(500)
+        .json({ errorMessage: "The user information could not be retrieved." });
     });
-  res.status(200);
 });
 
 //add a hub
