@@ -13,8 +13,24 @@ server.get("/", (req, res) => {
 server.use(express.json()); //needed for POST and PUT/PATCH
 server.use(cors());
 
-//view a list of hubs
+//GET a list of users
 server.get("/api/users", (req, res) => {
+  Hubs.find()
+    .then(hubs => {
+      res.status(200).json(hubs);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        errorMessage: "The users information could not be retrieved."
+      });
+    });
+  res.status(200);
+});
+
+//GET a specific user
+
+server.get("/api/users/:id", (req, res) => {
   Hubs.find()
     .then(hubs => {
       res.status(200).json(hubs);
